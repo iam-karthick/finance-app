@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { AuthProvider } from './context/AuthContext';
+import store from './redux/store';
+import Login from './components/Login';
+import Dashboard from './components/Dashboard';
+import { Container } from '@mui/material';
 
-function App() {
+// Main App component with routing
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <AuthProvider>
+        <Router>
+          <Container>
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+            </Routes>
+          </Container>
+        </Router>
+      </AuthProvider>
+    </Provider>
   );
-}
+};
 
 export default App;
