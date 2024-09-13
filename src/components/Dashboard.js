@@ -1,59 +1,46 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Button, List, ListItem, ListItemText, Typography } from '@mui/material';
-import { useSelector } from 'react-redux';
-import { getUsers, createUser, updateUser, deleteUser } from '../restService/api';
+import React from 'react';
+import { Routes, Route, Navigate, Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logout } from '../redux/slices/authSlice';
+import UserDetails from './UserDetails';
+import UsersList from './UserList';
+import { AppBar, Toolbar, Button, Container, Typography } from '@mui/material';
 
-const Dashboard = () => {
-  const [users, setUsers] = useState([]);
-  const { token } = useSelector((state) => state.user);
+function Dashboard() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const data = await getUsers();
-      setUsers(data);
-    };
-    fetchUsers();
-  }, []);
-
-  const handleCreateUser = async () => {
-    const newUser = { name: 'New User', email: 'newuser@example.com' };
-    const createdUser = await createUser(newUser);
-    setUsers([...users, createdUser]);
-  };
-
-  const handleUpdateUser = async (id) => {
-    const updatedUser = await updateUser(id, { name: 'Updated Name' });
-    setUsers(users.map((user) => (user.id === id ? updatedUser : user)));
-  };
-
-  const handleDeleteUser = async (id) => {
-    await deleteUser(id);
-    setUsers(users.filter((user) => user.id !== id));
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/');
   };
 
   return (
     <Container>
-      <Typography variant="h4" gutterBottom>
-        Dashboard
-      </Typography>
-      <Button onClick={handleCreateUser} variant="contained" color="primary">
-        Create User
-      </Button>
-      <List>
-        {users.map((user) => (
-          <ListItem key={user.id}>
-            <ListItemText primary={`${user.name} - ${user.email}`} />
-            <Button onClick={() => handleUpdateUser(user.id)} variant="outlined">
-              Update
-            </Button>
-            <Button onClick={() => handleDeleteUser(user.id)} variant="outlined" color="error">
-              Delete
-            </Button>
-          </ListItem>
-        ))}
-      </List>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            Dashboard
+          </Typography>
+          <Button color="inherit" component={Link} to="/dashboard/user-details">
+            User Details
+          </Button>
+          <Button color="inherit" component={Link} to="/dashboard/users-list">
+            Users List
+          </Button>
+          <Button color="inherit" onClick={handleLogout}>
+            Logout
+          </Button>
+        </Toolbar>
+      </AppBar>
+
+      <Routes>
+        <Route path="/" element={<Navigate to="user-details" />} />
+        <Route path="user-details" element={<UserDetails />} />
+        <Route path="users-list" element={<UsersList />} />
+      </Routes>
     </Container>
   );
-};
+}
 
 export default Dashboard;

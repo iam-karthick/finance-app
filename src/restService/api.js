@@ -1,27 +1,78 @@
 import axios from 'axios';
 
-const API_URL = 'localhost:8080'; 
+// Use the full URL including protocol (http:// or https://)
+const API_URL = 'http://localhost:8080/api/accounts'; 
 
 export const loginUser = async (credentials) => {
-  const response = await axios.post(`${API_URL}/login`, credentials);
-  return response.data;
+  try {
+    const response = await axios.post(`${API_URL}/login`, credentials, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    // Handle error appropriately
+    console.error('Login failed:', error);
+    throw error;
+  }
 };
 
 export const getUsers = async () => {
-  const response = await axios.get(`${API_URL}/users`);
-  return response.data;
+  try {
+    const response = await axios.get(API_URL, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    // Handle error appropriately
+    console.error('Failed to fetch users:', error);
+    throw error;
+  }
 };
 
 export const createUser = async (user) => {
-  const response = await axios.post(`${API_URL}/users`, user);
-  return response.data;
+  try {
+    const response = await axios.post(API_URL, user, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    // Handle error appropriately
+    console.error('Failed to create user:', error);
+    throw error;
+  }
 };
 
 export const updateUser = async (id, user) => {
-  const response = await axios.put(`${API_URL}/users/${id}`, user);
-  return response.data;
+  try {
+    const response = await axios.put(`${API_URL}/${id}`, user, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    // Handle error appropriately
+    console.error('Failed to update user:', error);
+    throw error;
+  }
 };
 
 export const deleteUser = async (id) => {
-  await axios.delete(`${API_URL}/users/${id}`);
+  try {
+    await axios.delete(`${API_URL}/${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (error) {
+    // Handle error appropriately
+    console.error('Failed to delete user:', error);
+    throw error;
+  }
 };

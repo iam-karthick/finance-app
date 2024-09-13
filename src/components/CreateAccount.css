@@ -1,0 +1,49 @@
+  .create-account-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    /* border: 1px solid #ddd; */
+    border-radius: 8px;
+  }
+  .create-account-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .text-field .MuiInputLabel-root {
+    color: rgba(0, 0, 0, 0.6);
+  }
+  
+  .text-field .MuiInputBase-input {
+    padding-top: 16px;
+  }
+  
+  .consent-label {
+    font-size: 0.875rem;
+  }
+  
+  .login-link {
+    margin-top: 16px;
+    text-align: center;
+  }
+  
+  .login-link a {
+    color: #3f51b5;
+    text-decoration: none;
+  }
+  
+  .login-link a:hover {
+    text-decoration: underline;
+  }
+  .create-account-logo {
+    width: 230px;
+    margin-bottom: 20px;
+  }
+  .create-account-heading{
+    padding-bottom: 10px;
+  }

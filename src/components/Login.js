@@ -1,98 +1,108 @@
-import React, { useState } from 'react';
-import { Button, TextField, Typography, Container } from '@mui/material';
-import { useDispatch } from 'react-redux';
-import { loginUser } from '../restService/api';
-import { login } from '../redux/userSlice';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/slices/authSlice";
+import { useNavigate, Link } from "react-router-dom";
+import { TextField, Button, Typography, Box } from "@mui/material";
+import "./Login.css";
+import logo from "../assets/Logo/rak-logo.png";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
-  const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [credentials, setCredentials] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
 
-  // Validate form inputs
-  const validate = () => {
-    let tempErrors = {};
-    if (!name) {
-      tempErrors.name = 'Name is required';
-    } else if (name.length > 50) {
-      tempErrors.name = 'Name must be less than 50 characters';
-    }
-
-    if (!email) {
-      tempErrors.email = 'Email is required';
-    } else if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)) {
-      tempErrors.email = 'Email format is invalid';
-    }
-
-    if (!password) {
-      tempErrors.password = 'Password is required';
-    } else if (password.length < 8) {
-      tempErrors.password = 'Password must be at least 8 characters long';
-    } else if (!/^[a-zA-Z0-9]+$/.test(password)) {
-      tempErrors.password = 'Password can only contain alphabets and numbers';
-    }
-
-    setErrors(tempErrors);
-    return Object.keys(tempErrors).length === 0;
+  const handleChange = (e) => {
+    setCredentials({
+      ...credentials,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
-      try {
-        const data = await loginUser({ email, password });
-        dispatch(login({ user: data.user, token: data.token }));
-        navigate('/dashboard');
-      } catch (error) {
-        console.error('Login failed:', error);
-      }
+    try {
+      await dispatch(login(credentials)).unwrap();
+      navigate("/dashboard"); // Redirect on successful login
+    } catch (err) {
+      setError("Login failed. Please check your credentials.");
     }
   };
 
   return (
-    <Container maxWidth="xs">
-      <Typography variant="h4" gutterBottom>
-        RAK BANK
-      </Typography>
-      <form onSubmit={handleSubmit}>
-        <TextField
-          label="Name"
-          fullWidth
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          error={!!errors.name}
-          helperText={errors.name}
-          margin="normal"
-        />
-        <TextField
-          label="Email"
-          type="email"
-          fullWidth
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          error={!!errors.email}
-          helperText={errors.email}
-          margin="normal"
-        />
-        <TextField
-          label="Password"
-          type="password"
-          fullWidth
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          error={!!errors.password}
-          helperText={errors.password}
-          margin="normal"
-        />
-        <Button type="submit" variant="contained" color="primary">
-          Login
-        </Button>
-      </form>
-    </Container>
+    <Box
+      className="login-container"
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+    >
+      <Box
+        className="login-form"
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        width={1}
+        maxWidth={400}
+        padding={3}
+        boxShadow={3}
+        borderRadius={2}
+      >
+        <img src={logo} alt="Logo" className="login-form-logo" />
+
+        <Typography
+          variant="h6"
+          className="login-form-heading"
+          component="h6"
+        >
+          <b> Login:</b>
+        </Typography>
+        {error && (
+          <Typography color="error" className="error-message">
+            {error}
+          </Typography>
+        )}
+        <form onSubmit={handleSubmit} className="login-form">
+          <TextField
+            label="Email"
+            variant="outlined"
+            type="email"
+            name="email"
+            value={credentials.email}
+            onChange={handleChange}
+            fullWidth
+            required
+            margin="normal"
+          />
+          <TextField
+            label="Password"
+            variant="outlined"
+            type="password"
+            name="password"
+            value={credentials.password}
+            onChange={handleChange}
+            fullWidth
+            required
+            margin="normal"
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mt: 2 }}
+          >
+            Login
+          </Button>
+        </form>
+        <Box className="signup-button" mt={2}>
+          <Typography variant="body2">
+            Don't have an account?{" "}
+            <Link to="/create-account">Create an Account</Link>
+          </Typography>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 
