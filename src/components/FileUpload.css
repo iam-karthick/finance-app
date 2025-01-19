@@ -1,0 +1,11 @@
+.file-upload-container {
+    padding: 20px;
+    text-align: center;
+  }
+  .summary, .chart-container {
+    margin-top: 20px;
+  }
+  input[type="file"] {
+    margin: 10px auto;
+  }
+  

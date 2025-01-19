@@ -4,7 +4,7 @@ import { login } from "../redux/slices/authSlice";
 import { useNavigate, Link } from "react-router-dom";
 import { TextField, Button, Typography, Box } from "@mui/material";
 import "./Login.css";
-import logo from "../assets/Logo/rak-logo.png";
+import logo from "../assets/Logo/karthickMinTech.png";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -22,8 +22,14 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await dispatch(login(credentials)).unwrap();
-      navigate("/dashboard"); // Redirect on successful login
+      // Dispatch login action and unwrap to get the JWT token
+      const response = await dispatch(login(credentials)).unwrap();
+      
+      // Assuming the JWT token is returned in response.token, save it to localStorage
+      localStorage.setItem("token", response.token); // Store token in localStorage
+
+      // Redirect to dashboard on successful login
+      navigate("/dashboard");
     } catch (err) {
       setError("Login failed. Please check your credentials.");
     }

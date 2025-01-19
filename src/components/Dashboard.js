@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { logout } from '../redux/slices/authSlice';
 import UserDetails from './UserDetails';
 import UsersList from './UserList';
+import FileUpload from './FileUpload'; // Import the new FileUpload component
 import { AppBar, Toolbar, Button, Container, Typography } from '@mui/material';
 
 function Dashboard() {
@@ -28,6 +29,9 @@ function Dashboard() {
           <Button color="inherit" component={Link} to="/dashboard/users-list">
             Users List
           </Button>
+          <Button color="inherit" component={Link} to="/dashboard/file-upload">
+            File Upload
+          </Button>
           <Button color="inherit" onClick={handleLogout}>
             Logout
           </Button>
@@ -38,6 +42,7 @@ function Dashboard() {
         <Route path="/" element={<Navigate to="user-details" />} />
         <Route path="user-details" element={<UserDetails />} />
         <Route path="users-list" element={<UsersList />} />
+        <Route path="file-upload" element={<FileUpload />} /> {/* Add route */}
       </Routes>
     </Container>
   );

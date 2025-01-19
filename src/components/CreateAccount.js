@@ -19,7 +19,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import PersonIcon from "@mui/icons-material/Person";
 import LockIcon from "@mui/icons-material/Lock";
 import "./CreateAccount.css";
-import logo from '../assets/Logo/rak-logo.png'; 
+import logo from '../assets/Logo/karthickMinTech.png'; 
 
 const CreateAccount = () => {
   const [accountDetails, setAccountDetails] = useState({
